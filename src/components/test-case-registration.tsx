@@ -139,6 +139,14 @@ export function TestCaseRegistration() {
     setFieldErrors({});
   }
 
+  function deleteTestCase(id: string) {
+    setTestCases((current) =>
+      current.filter((testCase) => testCase.id !== id),
+    );
+    setSuccessMessage(null);
+    setError(null);
+  }
+
   return (
     <section className="workspace-grid">
       <div className="primary-column">
@@ -170,7 +178,7 @@ export function TestCaseRegistration() {
                 className={fieldErrors.title ? "input input-error" : "input"}
                 id="title"
                 onChange={(event) => updateField("title", event.target.value)}
-                placeholder="Login com senha correta"
+                placeholder="Cadastrar caso de teste valido"
                 value={form.title}
               />
               {fieldErrors.title ? (
@@ -191,7 +199,7 @@ export function TestCaseRegistration() {
                 onChange={(event) =>
                   updateField("precondition", event.target.value)
                 }
-                placeholder="Usuario cadastrado"
+                placeholder="Tela Software Testing Lab aberta"
                 value={form.precondition}
               />
             </label>
@@ -208,7 +216,9 @@ export function TestCaseRegistration() {
                 }
                 id="steps"
                 onChange={(event) => updateField("steps", event.target.value)}
-                placeholder={"Informar email\nInformar senha\nConfirmar login"}
+                placeholder={
+                  "Preencher titulo\nPreencher pre-condicao\nPreencher passos\nPreencher resultado esperado\nClicar em Cadastrar caso de teste"
+                }
                 value={form.steps}
               />
               {fieldErrors.steps ? (
@@ -239,7 +249,7 @@ export function TestCaseRegistration() {
                 onChange={(event) =>
                   updateField("expectedResult", event.target.value)
                 }
-                placeholder="Usuario acessa a area logada."
+                placeholder="Caso de teste aparece na lista de casos cadastrados."
                 value={form.expectedResult}
               />
               {fieldErrors.expectedResult ? (
@@ -317,6 +327,14 @@ export function TestCaseRegistration() {
                   <p className="body-text">
                     Resultado esperado: {testCase.expectedResult}
                   </p>
+                  <button
+                    aria-label={`Excluir caso ${testCase.title}`}
+                    className="secondary-button delete-button"
+                    onClick={() => deleteTestCase(testCase.id)}
+                    type="button"
+                  >
+                    Excluir caso
+                  </button>
                 </li>
               ))}
             </ul>

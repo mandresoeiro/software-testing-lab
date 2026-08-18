@@ -14,23 +14,57 @@ test("pagina inicial apresenta o laboratorio", async ({ page }) => {
 test("cadastra um caso de teste na tela inicial", async ({ page }) => {
   await page.goto("/");
 
-  await page.getByLabel("Titulo").fill("Login com senha correta");
-  await page.getByLabel("Pre-condicao").fill("Usuario cadastrado");
   await page
-    .getByLabel("Passos")
-    .fill("Informar email\nInformar senha\nConfirmar login");
+    .getByRole("textbox", { name: "Titulo" })
+    .fill("Cadastrar caso de teste valido");
   await page
-    .getByLabel("Resultado esperado")
-    .fill("Usuario acessa a area logada.");
+    .getByRole("textbox", { name: "Pre-condicao" })
+    .fill("Tela Software Testing Lab aberta");
+  await page
+    .getByRole("textbox", { name: "Passos" })
+    .fill(
+      "Preencher titulo\nPreencher pre-condicao\nPreencher passos\nPreencher resultado esperado\nClicar em Cadastrar caso de teste",
+    );
+  await page
+    .getByRole("textbox", { name: "Resultado esperado" })
+    .fill("Caso de teste aparece na lista de casos cadastrados.");
 
   await page
     .getByRole("button", { name: "Cadastrar caso de teste" })
     .click();
 
   await expect(
-    page.getByRole("heading", { name: "Login com senha correta" }),
+    page.getByRole("heading", { name: "Cadastrar caso de teste valido" }),
   ).toBeVisible();
-  await expect(page.getByText("3 passo(s)")).toBeVisible();
+  await expect(page.getByText("5 passo(s)")).toBeVisible();
+});
+
+test("exclui um caso de teste cadastrado", async ({ page }) => {
+  await page.goto("/");
+
+  await page
+    .getByRole("textbox", { name: "Titulo" })
+    .fill("Cadastrar caso temporario");
+  await page.getByRole("textbox", { name: "Passos" }).fill("Cadastrar\nExcluir");
+  await page
+    .getByRole("textbox", { name: "Resultado esperado" })
+    .fill("Caso temporario deixa de aparecer na lista.");
+
+  await page
+    .getByRole("button", { name: "Cadastrar caso de teste" })
+    .click();
+
+  await expect(
+    page.getByRole("heading", { name: "Cadastrar caso temporario" }),
+  ).toBeVisible();
+
+  await page
+    .getByRole("button", { name: "Excluir caso Cadastrar caso temporario" })
+    .click();
+
+  await expect(
+    page.getByRole("heading", { name: "Cadastrar caso temporario" }),
+  ).not.toBeVisible();
 });
 
 test("mostra erros visuais ao tentar cadastrar vazio", async ({ page }) => {
