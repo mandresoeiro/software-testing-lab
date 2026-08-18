@@ -12,6 +12,8 @@ type FormState = {
   expectedResult: string;
 };
 
+type FieldErrors = Partial<Record<keyof FormState, string>>;
+
 type RegisteredTestCase = TestCase & {
   id: string;
   createdAt: string;
@@ -34,6 +36,7 @@ export function TestCaseRegistration() {
   const [form, setForm] = useState<FormState>(initialFormState);
   const [testCases, setTestCases] = useState<RegisteredTestCase[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isStorageReady, setIsStorageReady] = useState(false);
 
@@ -73,12 +76,14 @@ export function TestCaseRegistration() {
 
   function updateField(field: keyof FormState, value: string) {
     setSuccessMessage(null);
+    setFieldErrors((current) => ({ ...current, [field]: undefined }));
     setForm((current) => ({ ...current, [field]: value }));
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    setFieldErrors({});
     setSuccessMessage(null);
 
     try {
@@ -100,10 +105,26 @@ export function TestCaseRegistration() {
 
       setTestCases((current) => [registeredTestCase, ...current]);
       setForm(initialFormState);
+      setFieldErrors({});
       setSuccessMessage("Caso de teste cadastrado.");
     } catch (validationError) {
       if (validationError instanceof ZodError) {
-        setError(validationError.issues[0]?.message ?? "Dados invalidos.");
+        const nextFieldErrors: FieldErrors = {};
+
+        for (const issue of validationError.issues) {
+          const field = issue.path[0];
+
+          if (
+            field === "title" ||
+            field === "steps" ||
+            field === "expectedResult"
+          ) {
+            nextFieldErrors[field] = issue.message;
+          }
+        }
+
+        setFieldErrors(nextFieldErrors);
+        setError("Revise os campos destacados antes de cadastrar.");
         return;
       }
 
@@ -115,6 +136,7 @@ export function TestCaseRegistration() {
     setTestCases([]);
     setSuccessMessage(null);
     setError(null);
+    setFieldErrors({});
   }
 
   return (
@@ -143,12 +165,19 @@ export function TestCaseRegistration() {
             <label className="field" htmlFor="title">
               Titulo
               <input
-                className="input"
+                aria-describedby={fieldErrors.title ? "title-error" : undefined}
+                aria-invalid={Boolean(fieldErrors.title)}
+                className={fieldErrors.title ? "input input-error" : "input"}
                 id="title"
                 onChange={(event) => updateField("title", event.target.value)}
                 placeholder="Login com senha correta"
                 value={form.title}
               />
+              {fieldErrors.title ? (
+                <span className="field-error" id="title-error">
+                  {fieldErrors.title}
+                </span>
+              ) : null}
             </label>
 
             <label
@@ -170,12 +199,23 @@ export function TestCaseRegistration() {
             <label className="field" htmlFor="steps">
               Passos
               <textarea
-                className="textarea textarea-large"
+                aria-describedby={fieldErrors.steps ? "steps-error" : undefined}
+                aria-invalid={Boolean(fieldErrors.steps)}
+                className={
+                  fieldErrors.steps
+                    ? "textarea textarea-large input-error"
+                    : "textarea textarea-large"
+                }
                 id="steps"
                 onChange={(event) => updateField("steps", event.target.value)}
                 placeholder={"Informar email\nInformar senha\nConfirmar login"}
                 value={form.steps}
               />
+              {fieldErrors.steps ? (
+                <span className="field-error" id="steps-error">
+                  {fieldErrors.steps}
+                </span>
+              ) : null}
             </label>
 
             <label
@@ -184,7 +224,17 @@ export function TestCaseRegistration() {
             >
               Resultado esperado
               <textarea
-                className="textarea"
+                aria-describedby={
+                  fieldErrors.expectedResult
+                    ? "expected-result-error"
+                    : undefined
+                }
+                aria-invalid={Boolean(fieldErrors.expectedResult)}
+                className={
+                  fieldErrors.expectedResult
+                    ? "textarea input-error"
+                    : "textarea"
+                }
                 id="expectedResult"
                 onChange={(event) =>
                   updateField("expectedResult", event.target.value)
@@ -192,6 +242,11 @@ export function TestCaseRegistration() {
                 placeholder="Usuario acessa a area logada."
                 value={form.expectedResult}
               />
+              {fieldErrors.expectedResult ? (
+                <span className="field-error" id="expected-result-error">
+                  {fieldErrors.expectedResult}
+                </span>
+              ) : null}
             </label>
           </div>
 

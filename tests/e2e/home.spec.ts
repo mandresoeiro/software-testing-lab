@@ -32,3 +32,24 @@ test("cadastra um caso de teste na tela inicial", async ({ page }) => {
   ).toBeVisible();
   await expect(page.getByText("3 passo(s)")).toBeVisible();
 });
+
+test("mostra erros visuais ao tentar cadastrar vazio", async ({ page }) => {
+  await page.goto("/");
+
+  await page
+    .getByRole("button", { name: "Cadastrar caso de teste" })
+    .click();
+
+  await expect(
+    page.getByText("Revise os campos destacados antes de cadastrar."),
+  ).toBeVisible();
+  await expect(
+    page.getByText("O titulo do caso de teste e obrigatorio."),
+  ).toBeVisible();
+  await expect(
+    page.getByText("O caso de teste precisa ter pelo menos um passo."),
+  ).toBeVisible();
+  await expect(
+    page.getByText("O resultado esperado e obrigatorio."),
+  ).toBeVisible();
+});
