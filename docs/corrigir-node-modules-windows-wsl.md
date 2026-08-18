@@ -21,6 +21,13 @@ Linux/WSL precisa de binarios Linux.
 Alguns pacotes do Next.js, Tailwind CSS, Rollup e Lightning CSS usam partes
 nativas. Essas partes sao diferentes para cada sistema operacional.
 
+Observacao do projeto:
+
+```text
+O Software Testing Lab nao usa mais Tailwind CSS.
+Ele usa CSS proprio para evitar esse problema enquanto voce esta aprendendo.
+```
+
 ## Regra principal
 
 Use sempre o mesmo ambiente para instalar e rodar.
@@ -102,21 +109,13 @@ Se ainda aparecer:
 Cannot find module '../lightningcss.linux-x64-gnu.node'
 ```
 
-rode esta sequencia completa no WSL:
+rode esta sequencia completa no WSL para limpar dependencias antigas:
 
 ```bash
 cd /mnt/c/dev/software-testing-lab
 rm -rf node_modules .next
 npm cache verify
 npm ci --include=optional
-npm run dev
-```
-
-Se mesmo assim continuar, instale explicitamente os binarios Linux usados pelo
-Tailwind/Lightning CSS:
-
-```bash
-npm install --save-optional lightningcss-linux-x64-gnu @tailwindcss/oxide-linux-x64-gnu
 npm run dev
 ```
 
