@@ -1,15 +1,9 @@
-const plannedModules = [
-  "Casos de teste",
-  "Planos de teste",
-  "Execucoes",
-  "Defeitos",
-  "Evidencias",
-];
+import { TestCaseRegistration } from "@/components/test-case-registration";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-50">
-      <section className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center px-6 py-12">
+      <section className="mx-auto w-full max-w-6xl px-6 py-12">
         <p className="text-sm font-medium uppercase tracking-wide text-cyan-300">
           Validacao e Teste de Software
         </p>
@@ -23,19 +17,7 @@ export default function Home() {
           casos de teste, execucoes, defeitos, evidencias e aprendizados.
         </p>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {plannedModules.map((module) => (
-            <div
-              className="rounded-lg border border-zinc-800 bg-zinc-900 p-5"
-              key={module}
-            >
-              <h2 className="text-base font-semibold">{module}</h2>
-              <p className="mt-2 text-sm leading-6 text-zinc-400">
-                Modulo planejado para evoluir aos poucos durante as aulas.
-              </p>
-            </div>
-          ))}
-        </div>
+        <TestCaseRegistration />
       </section>
     </main>
   );

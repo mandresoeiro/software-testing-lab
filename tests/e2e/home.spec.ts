@@ -7,6 +7,28 @@ test("pagina inicial apresenta o laboratorio", async ({ page }) => {
     page.getByRole("heading", { name: "Software Testing Lab" }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Casos de teste" }),
+    page.getByRole("heading", { name: "Cadastrar caso de teste" }),
   ).toBeVisible();
+});
+
+test("cadastra um caso de teste na tela inicial", async ({ page }) => {
+  await page.goto("/");
+
+  await page.getByLabel("Titulo").fill("Login com senha correta");
+  await page.getByLabel("Pre-condicao").fill("Usuario cadastrado");
+  await page
+    .getByLabel("Passos")
+    .fill("Informar email\nInformar senha\nConfirmar login");
+  await page
+    .getByLabel("Resultado esperado")
+    .fill("Usuario acessa a area logada.");
+
+  await page
+    .getByRole("button", { name: "Cadastrar caso de teste" })
+    .click();
+
+  await expect(
+    page.getByRole("heading", { name: "Login com senha correta" }),
+  ).toBeVisible();
+  await expect(page.getByText("3 passo(s)")).toBeVisible();
 });

@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { setTimeout as wait } from "node:timers/promises";
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = "http://localhost:3100";
 
 function run(command, args, options = {}) {
   return spawn(command, args, {
@@ -64,6 +64,8 @@ async function stopProcessTree(child) {
 const nextServer = run(process.execPath, [
   "node_modules/next/dist/bin/next",
   "dev",
+  "-p",
+  "3100",
 ]);
 
 try {
@@ -76,6 +78,7 @@ try {
       {
         env: {
           ...process.env,
+          PLAYWRIGHT_BASE_URL: baseUrl,
           SOFTWARE_TESTING_LAB_E2E_MANAGED: "1",
         },
       },
