@@ -1,5 +1,15 @@
 # Aula 1 - Conceitos de validacao
 
+## Cadastro no Testing Lab
+
+```text
+ID: aula-01-conceitos-de-validacao
+Status: cadastrada
+Data de cadastro: 2026-08-18
+Tipo: aula da apostila
+Projeto: Software Testing Lab
+```
+
 ## Fonte
 
 ```text
@@ -152,8 +162,11 @@ Vamos provar com Vitest que:
 ## Evidencia
 
 ```text
-Commit: a registrar apos implementacao
-Registro no Engineering Atlas: registrar depois da validacao
+Commit: 694af67 feat: add test case validation from theme one
+Arquivo da aula: docs/aulas/01-conceitos-de-validacao.md
+Pratica criada: src/lib/test-case.ts
+Teste criado: src/lib/test-case.test.ts
+Registro no Engineering Atlas: pendente
 ```
 
 ## Duvidas abertas
