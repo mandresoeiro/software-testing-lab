@@ -70,10 +70,16 @@ Dentro do WSL:
 cd /mnt/c/dev/software-testing-lab
 ```
 
+Pare o servidor se ele estiver rodando:
+
+```bash
+Ctrl + C
+```
+
 Apague a instalacao atual:
 
 ```bash
-rm -rf node_modules
+rm -rf node_modules .next
 ```
 
 Instale novamente pelo WSL:
@@ -87,6 +93,35 @@ Rode:
 ```bash
 npm run dev
 ```
+
+## Se o erro continuar no WSL
+
+Se ainda aparecer:
+
+```text
+Cannot find module '../lightningcss.linux-x64-gnu.node'
+```
+
+rode esta sequencia completa no WSL:
+
+```bash
+cd /mnt/c/dev/software-testing-lab
+rm -rf node_modules .next
+npm cache verify
+npm ci --include=optional
+npm run dev
+```
+
+Se mesmo assim continuar, instale explicitamente os binarios Linux usados pelo
+Tailwind/Lightning CSS:
+
+```bash
+npm install --save-optional lightningcss-linux-x64-gnu @tailwindcss/oxide-linux-x64-gnu
+npm run dev
+```
+
+Depois disso, nao volte a rodar `npm install` pelo Windows na mesma pasta, senao
+o problema pode voltar.
 
 ## Se o WSL nao tiver Node.js
 
